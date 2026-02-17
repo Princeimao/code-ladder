@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// Re-importing to ensure named exports are correctly picked up by the build system
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Terminal, Github, Chrome, ArrowLeft, Globe as GlobeIcon } from 'lucide-react';
 
 interface AuthPageProps {
@@ -10,7 +9,6 @@ interface AuthPageProps {
 }
 
 const AuthPage: React.FC<AuthPageProps> = ({ mode }) => {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-black flex overflow-hidden">

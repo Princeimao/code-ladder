@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, CheckCircle2, Circle, ChevronRight } from 'lucide-react';
+import { Search, Filter, ChevronRight } from 'lucide-react';
 import { type Problem } from "../../types"
 import { motion } from 'framer-motion';
 
@@ -71,7 +71,6 @@ const ProblemsSection: React.FC = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/10 bg-zinc-900/50">
-                <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Status</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Title</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Difficulty</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Acceptance</th>
@@ -92,13 +91,7 @@ const ProblemsSection: React.FC = () => {
                   onClick={() => navigate(`/problem/${problem.id}`)}
                   className="hover:bg-white/5 transition-colors cursor-pointer group"
                 >
-                  <td className="px-6 py-4">
-                    {Math.random() > 0.7 ? (
-                      <CheckCircle2 size={18} className="text-green-500" />
-                    ) : (
-                      <Circle size={18} className="text-zinc-700" />
-                    )}
-                  </td>
+                  
                   <td className="px-6 py-4 font-medium">{problem.title}</td>
                   <td className="px-6 py-4">
                     <span className={`text-xs px-2 py-1 rounded-full border ${

@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Search,ChevronRight } from 'lucide-react';
 import { type Problem } from "../../types"
+
+type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
 const PROBLEMS: Problem[] = Array.from({ length: 20 }, (_, i) => ({
   id: (i + 1).toString(),
@@ -14,7 +15,7 @@ const PROBLEMS: Problem[] = Array.from({ length: 20 }, (_, i) => ({
     '3Sum', '3Sum Closest', 'Letter Combinations', '4Sum', 'Remove Nth Node', 'Valid Parentheses',
     'Merge Two Sorted Lists', 'Generate Parentheses'
   ][i % 20],
-  difficulty: ['Easy', 'Medium', 'Hard'][Math.floor(Math.random() * 3)] as any,
+  difficulty: ['Easy', 'Medium', 'Hard'][Math.floor(Math.random() * 3)] as Difficulty,
   acceptance: `${(Math.random() * 60 + 30).toFixed(1)}%`,
   category: ['Arrays', 'Strings', 'Linked List', 'DP', 'Math'][Math.floor(Math.random() * 5)]
 }));
