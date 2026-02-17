@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Cpu, Globe, Lock, ShieldCheck, Zap, BarChart3 } from 'lucide-react';
+import { Cpu, Globe, Zap, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Features: React.FC = () => {

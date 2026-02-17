@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, Terminal, Play, Send, ChevronDown, 
-  Settings, MessageSquare, Layout, Sparkles, Code2, Clock, CheckCircle2
+  ArrowLeft, Play, Send, ChevronDown, 
+  Settings, Layout, Clock, CheckCircle2
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 

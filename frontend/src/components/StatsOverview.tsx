@@ -5,7 +5,6 @@ import {
   FileText, 
   Sparkles, 
   Code2, 
-  User,
   Share2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
