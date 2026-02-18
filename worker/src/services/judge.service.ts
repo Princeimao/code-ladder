@@ -50,8 +50,7 @@ export class JudgeService {
             container.exec({Cmd: ["docker", "cp", filePath, `${docker.containerName}:/app`]});
 
             this.cleanupFile(filePath);
-
-            return result;
+            
         } catch (error) {
             console.error("Error in judge runner:", error);
             return {
