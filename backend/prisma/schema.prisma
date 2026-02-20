@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    String @id @default(uuid()) @unique
+  name  String
+  role  String @default("USER")
+  email String @unique
+  profilePic String?
+  refreshToken String?
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts AuthAccount[]
+}
+
+model AuthAccount {
+  provider AuthProvider[] 
+  email String @unique
+  providerId String[]
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([provider, providerId])
+}
+
+enum AuthProvider {
+  GOOGLE
+  GITHUB
+}

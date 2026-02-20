@@ -41,5 +41,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "moduleResolution": "nodenext"
-  }
+  }, 
+  "include": ["src"],
+  "exclude": ["node_modules", "prisma.config.ts"]
 }
