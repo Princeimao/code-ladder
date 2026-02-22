@@ -93,7 +93,6 @@ const StatsOverview: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-sm font-bold text-zinc-200 block">IntelliSense</span>
-                    <span className="text-[10px] text-zinc-500">AI-powered suggestions</span>
                   </div>
                 </div>
                 <button 
@@ -157,23 +156,7 @@ const StatsOverview: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center gap-6">
-                  <div className="flex -space-x-3">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="w-9 h-9 rounded-full border-2 border-black bg-zinc-900 flex items-center justify-center overflow-hidden ring-1 ring-white/10 shadow-lg">
-                        <img src={`https://i.pravatar.cc/100?u=${i + 20}`} alt="user" className="opacity-80" />
-                      </div>
-                    ))}
-                  </div>
                   <div className="flex items-center gap-3">
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`p-2.5 rounded-full border transition-all ${
-                        editorMode === 'doc' ? 'border-zinc-200 text-zinc-400 hover:bg-zinc-50' : 'border-white/10 text-zinc-500 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <Share2 size={16} />
-                    </motion.button>
                     <motion.button 
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}

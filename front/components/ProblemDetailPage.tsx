@@ -6,9 +6,25 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, Play, Send, ChevronDown, 
-  Settings, Layout, Clock, CheckCircle2
+  Settings, Layout, Clock, CheckCircle2,
+  Sparkles, Zap, Moon, Sun, Cpu
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { Editor, Language } from './Editor';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 const ProblemDetailPage: React.FC = () => {
   const { id } = useParams();
@@ -16,9 +32,19 @@ const ProblemDetailPage: React.FC = () => {
   const [code, setCode] = useState('// Your code here...');
   const [outputHeight, setOutputHeight] = useState(200);
   const [isRunning, setIsRunning] = useState(false);
+  
+  // Editor Settings
+  const [language, setLanguage] = useState<string>("javascript");
+  const [theme, setTheme] = useState<string>("vs-dark");
+  const [suggestion, setSuggestion] = useState(true);
+  const [intellisense, setIntellisense] = useState(true);
+
+  const handleCodeChange = (val: string | undefined) => {
+    if (val !== undefined) setCode(val);
+  };
 
   return (
-    <div className="h-screen bg-[#050505] text-white flex flex-col overflow-hidden selection:bg-indigo-500/30">
+    <div className="h-screen pt-16 bg-[#050505] text-white flex flex-col overflow-hidden selection:bg-indigo-500/30">
       
       {/* Top Bar Navigation & Actions */}
       <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-black/40 backdrop-blur-xl shrink-0 z-50">
@@ -52,14 +78,83 @@ const ProblemDetailPage: React.FC = () => {
            </button>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-white/5 rounded-xl text-[10px] font-black tracking-widest uppercase text-zinc-400 hover:text-white transition-all">
-            Javascript
-            <ChevronDown size={14} />
-          </button>
-          <button className="p-2 text-zinc-500 hover:text-white transition-colors">
-            <Settings size={18} />
-          </button>
+        <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-white/5 rounded-xl text-[10px] font-black tracking-widest uppercase text-zinc-400 hover:text-white transition-all">
+                {language}
+                <ChevronDown size={14} />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-zinc-900 border-zinc-800 text-zinc-200">
+              <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
+                <DropdownMenuRadioItem value="javascript">Javascript</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="typescript">Typescript</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="java">Java</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="cpp">C++</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="python">Python</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Editor Settings */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-2 text-zinc-500 hover:text-white transition-colors">
+                <Settings size={18} />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-64 p-4 bg-zinc-950 border-zinc-800 text-zinc-200 rounded-2xl shadow-2xl" align="end">
+              <DropdownMenuLabel className="px-0 pt-0 pb-3 text-[10px] font-black uppercase tracking-widest text-zinc-500">Editor Settings</DropdownMenuLabel>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-1.5 rounded-lg bg-zinc-900">
+                      {theme === 'vs-dark' ? <Moon size={14} /> : <Sun size={14} />}
+                    </div>
+                    <Label className="text-sm font-medium">Dark Theme</Label>
+                  </div>
+                  <Switch 
+                    checked={theme === 'vs-dark'} 
+                    onCheckedChange={(checked) => setTheme(checked ? 'vs-dark' : 'light')} 
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-1.5 rounded-lg bg-zinc-900">
+                      <Sparkles size={14} className="text-yellow-500" />
+                    </div>
+                    <Label className="text-sm font-medium">Suggestions</Label>
+                  </div>
+                  <Switch 
+                    checked={suggestion} 
+                    onCheckedChange={setSuggestion} 
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-1.5 rounded-lg bg-zinc-900">
+                      <Cpu size={14} className="text-indigo-400" />
+                    </div>
+                    <Label className="text-sm font-medium">Intellisense</Label>
+                  </div>
+                  <Switch 
+                    checked={intellisense} 
+                    onCheckedChange={setIntellisense} 
+                  />
+                </div>
+              </div>
+
+              <DropdownMenuSeparator className="my-4 bg-white/5" />
+              <div className="text-[10px] text-zinc-600 font-medium">
+                Adjust your coding experience for maximum productivity.
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -137,17 +232,14 @@ const ProblemDetailPage: React.FC = () => {
           
           {/* Main Code Area */}
           <div className="flex-1 relative flex overflow-hidden">
-            <div className="w-12 bg-zinc-950/80 border-r border-white/5 flex flex-col items-center pt-8 gap-6 text-zinc-700 font-mono text-[10px] select-none">
-              {Array.from({ length: 30 }).map((_, i) => <div key={i}>{i + 1}</div>)}
-            </div>
-            <div className="flex-1 p-8 bg-[#080808]">
-              <textarea 
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full h-full bg-transparent border-none outline-none resize-none font-mono text-sm leading-8 text-zinc-300 placeholder-zinc-800"
-                spellCheck={false}
-              />
-            </div>
+            <Editor 
+              language={language} 
+              theme={theme}
+              suggestion={suggestion}
+              intellisense={intellisense}
+              value={code}
+              onValChange={handleCodeChange}
+            />
           </div>
 
           {/* Bottom Terminal Section */}
@@ -223,3 +315,4 @@ const ProblemDetailPage: React.FC = () => {
 };
 
 export default ProblemDetailPage;
+

@@ -1,18 +1,21 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link'
-import { Terminal, Github, ArrowLeft, Globe as GlobeIcon } from 'lucide-react';
+import { Terminal, Github, ArrowLeft, Globe as GlobeIcon, Loader2 } from 'lucide-react';
 import google from '@/public/google.svg'
 import Image from 'next/image';
+import { signIn } from "next-auth/react";
+import { githubAuth, googleAuth } from '@/app/api/auth.api';
 
 interface AuthPageProps {
   mode: 'signin' | 'signup';
 }
 
 const AuthPage: React.FC<AuthPageProps> = ({ mode = "signin" }) => {
-
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [githubLoading, setGithubLoading] = useState(false);
   return (
     <div className="min-h-screen bg-black flex overflow-hidden">
       {/* Branding Section (Left) */}
@@ -20,7 +23,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode = "signin" }) => {
         <div className="absolute inset-0 bg-grid opacity-10"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full"></div>
         
-        {/* Animated Globe/Orb Component */}
         <motion.div 
           animate={{ 
             rotate: 360,
@@ -54,11 +56,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode = "signin" }) => {
             The professional standard for algorithm training and interview engineering.
           </p>
         </div>
-
-        <div className="absolute bottom-12 flex items-center gap-2 text-zinc-600 text-xs font-black tracking-widest uppercase">
-          <Terminal size={14} />
-          SECURED BY ENCRYPTION
-        </div>
       </div>
 
       {/* Auth Side (Right) */}
@@ -86,13 +83,27 @@ const AuthPage: React.FC<AuthPageProps> = ({ mode = "signin" }) => {
           </div>
 
           <div className="space-y-4">
-            <button className="w-full flex items-center justify-center gap-4 bg-white text-black h-14 rounded-2xl font-black text-sm hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-lg shadow-white/5">
+            <button 
+              onClick={() => {
+                googleAuth.login();
+                setGoogleLoading(true);
+                return;
+              }}
+              className="w-full flex items-center justify-center gap-4 bg-white text-black h-14 rounded-2xl font-black text-sm hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-lg shadow-white/5"
+            >
               <Image src={google} alt="google" width={20} height={20}/>
-              CONTINUE WITH GOOGLE
+              {googleLoading ? <Loader2 className="animate-spin" size={20} /> : 'CONTINUE WITH GOOGLE'}
             </button>
-            <button className="w-full flex items-center justify-center gap-4 bg-zinc-900 border border-white/5 text-white h-14 rounded-2xl font-black text-sm hover:bg-zinc-800 transition-all active:scale-[0.98]">
+            <button 
+              onClick={() => {
+                githubAuth.login();
+                setGithubLoading(true);
+                return;
+              }}
+              className="w-full flex items-center justify-center gap-4 bg-zinc-900 border border-white/5 text-white h-14 rounded-2xl font-black text-sm hover:bg-zinc-800 transition-all active:scale-[0.98]"
+            >
               <Github size={20} />
-              CONTINUE WITH GITHUB
+              {githubLoading ? <Loader2 className="animate-spin" size={20} /> : 'CONTINUE WITH GITHUB'}
             </button>
           </div>
 

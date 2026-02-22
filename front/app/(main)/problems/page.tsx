@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+"use client"
+
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from       'next/navigation';
 import { Search,ChevronRight } from 'lucide-react';
 import { type Problem } from "@/types"
+import { setUser } from '@/app/store/authReducer';
+import { getUser } from '@/app/api/auth.api';
+import { useDispatch } from 'react-redux';
 
 type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
@@ -15,19 +20,25 @@ const PROBLEMS: Problem[] = Array.from({ length: 20 }, (_, i) => ({
     '3Sum', '3Sum Closest', 'Letter Combinations', '4Sum', 'Remove Nth Node', 'Valid Parentheses',
     'Merge Two Sorted Lists', 'Generate Parentheses'
   ][i % 20],
-  difficulty: ['Easy', 'Medium', 'Hard'][Math.floor(Math.random() * 3)] as Difficulty,
-  acceptance: `${(Math.random() * 60 + 30).toFixed(1)}%`,
-  category: ['Arrays', 'Strings', 'Linked List', 'DP', 'Math'][Math.floor(Math.random() * 5)]
+  difficulty: ['Easy', 'Medium', 'Hard'][Math.floor(15 * 3)] as Difficulty,
+  acceptance: `${(1 * 60 + 30).toFixed(1)}%`,
+  category: ['Arrays', 'Strings', 'Linked List', 'DP', 'Math'][Math.floor(3 * 5)]
 }));
 
 const ProblemsPage: React.FC = () => {
   const router = useRouter();
   const [search, setSearch] = useState('');
-
+  const dispatch = useDispatch();
   const filtered = PROBLEMS.filter(p => p.title.toLowerCase().includes(search.toLowerCase()));
 
+  useEffect(() => {
+    getUser().then((res) => {
+      dispatch(setUser(res.data.user));
+    });
+  }, []);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-22">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
