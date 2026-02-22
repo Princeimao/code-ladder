@@ -25,5 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // import routes
 import judgementRoutes from "./routes/judgement.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 app.use("/api/judgement", judgementRoutes);
+app.use("/api/auth", authRoutes);

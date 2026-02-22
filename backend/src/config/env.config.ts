@@ -1,5 +1,3 @@
-import "dotenv/config"
-
 export const getEnv = (name: string) => {
     const value = process.env[name];
     if (!value) {

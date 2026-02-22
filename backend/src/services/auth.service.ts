@@ -36,8 +36,8 @@ class GoogleService {
     }
 }
 
-const GOOGLE_CLIENT_ID = getEnv(process.env.GOOGLE_CLIENT_ID!);
-const GOOGLE_CLIENT_SECRET = getEnv(process.env.GOOGLE_CLIENT_SECRET!);
-const GOOGLE_REDIRECT_URL = getEnv(process.env.GOOGLE_REDIRECT_URL!);
+const GOOGLE_CLIENT_ID = getEnv("GOOGLE_CLIENT_ID");
+const GOOGLE_CLIENT_SECRET = getEnv("GOOGLE_CLIENT_SECRET");
+const GOOGLE_REDIRECT_URL = getEnv("GOOGLE_REDIRECT_URL");
 
 export const googleAuth = new GoogleService(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URL);
