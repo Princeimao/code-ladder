@@ -14,6 +14,7 @@ app.use(cors({
     credentials: true, 
     methods: ["GET", "POST", "PUT", "DELETE"]
 }));
+app.set('trust proxy', 1)
 app.use(apiLimiter);
 app.use("/auth", authLimiter);
 app.use(helmet());
