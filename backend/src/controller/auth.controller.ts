@@ -38,10 +38,14 @@ export const googleCallback = async (req: Request, res: Response) => {
         const user = await prisma.user.findUnique({
             where: {
                 email: userInfo.email
+            }, include:  {
+                accounts: true
             }
         })
 
-        if (user) {
+        const isGoogleAuth = user?.accounts.find((account) => account.provider === "GOOGLE");
+
+        if (user && isGoogleAuth) {
             const accessToken = await generateAccessToken(user.email);
 
             res.cookie("accessToken", accessToken, {
@@ -59,7 +63,7 @@ export const googleCallback = async (req: Request, res: Response) => {
         const accessToken = await generateAccessToken(userInfo.email);
         const refreshToken = await generateRefreshToken(userInfo.email);
         
-        const newUser = await prisma.user.create({
+        await prisma.user.create({
             data: {
                 email: userInfo.email,
                 name: userInfo.name,
@@ -157,10 +161,14 @@ export const githubCallback = async (req: Request, res: Response) => {
         const user = await prisma.user.findUnique({
             where: {
                 email: userInfo.email
+            }, include:  {
+                accounts: true
             }
         })
 
-        if (user) {
+        const isGithubAuth = user?.accounts.find((account) => account.provider === "GITHUB");
+
+        if (user && isGithubAuth) {
             const accessToken = await generateAccessToken(user.email);
 
             res.cookie("accessToken", accessToken, {

@@ -35,8 +35,8 @@ class GithubService {
     }
 }
 
-const GITHUB_CLIENT_ID = getEnv("GITHUB_CLIENT_ID");
-const GITHUB_CLIENT_SECRET = getEnv("GITHUB_CLIENT_SECRET");
+const GITHUB_CLIENT_ID = getEnv("GITHUB_ID");
+const GITHUB_CLIENT_SECRET = getEnv("GITHUB_SECRET");
 const GITHUB_REDIRECT_URL = getEnv("GITHUB_REDIRECT_URL");
 
 export const githubAuth = new GithubService(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT_URL);

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const companySchema = new mongoose.Schema({
+const topicSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,4 +13,4 @@ const companySchema = new mongoose.Schema({
     }
 })
 
-export const Company = mongoose.model("Company", companySchema)
+export const Topic = mongoose.model("Topic", topicSchema)
