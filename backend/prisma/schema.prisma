@@ -17,6 +17,7 @@ model User {
   isVerified Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  submissions Submission[]
 
   accounts AuthAccount[]
 }
@@ -29,6 +30,39 @@ model AuthAccount {
   userId String
 
   @@unique([provider, providerId])
+}
+
+model Submission {
+  id String @id @default(uuid()) @unique
+  title String
+  questionId String
+  language Language
+  time String
+  memory String
+  status SubmissionStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+  userId String
+}
+
+
+enum Language {
+  PYTHON
+  JAVASCRIPT
+  C
+  CPP
+  JAVA
+}
+
+enum SubmissionStatus {
+  PENDING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILATION_ERROR
 }
 
 enum AuthProvider {
