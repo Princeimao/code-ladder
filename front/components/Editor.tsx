@@ -20,32 +20,33 @@ interface EditorProps {
 
 export const Editor = ({ language, theme, suggestion, intellisense, value, onValChange }: EditorProps) => {
     return (
-        <Monaco 
-            language={language}
-            theme={theme}
-            value={value}
-            onChange={(val) => onValChange(val)}
-            width={"100%"}
-            height={"100%"}
-            options={{
-                fontSize: 14,
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-                lineNumbers: "on",
-                roundedSelection: true,
-                cursorSmoothCaretAnimation: "on",
-                cursorBlinking: "smooth",
-                smoothScrolling: true,
-                padding: { top: 16, bottom: 16 },
-                suggestOnTriggerCharacters: suggestion,
-                quickSuggestions: intellisense,
-                parameterHints: { enabled: intellisense },
-                snippetSuggestions: suggestion ? "inline" : "none",
-                wordBasedSuggestions: "currentDocument",
-                fontLigatures: true,
-            }}
-            className="pt-2 rounded-2xl"
-        />      
+        <div className="w-full h-full overflow-hidden rounded-2xl">
+            <Monaco 
+                language={language}
+                theme={theme}
+                value={value}
+                onChange={(val) => onValChange(val)}
+                width={"100%"}
+                height={"100%"}
+                options={{
+                    fontSize: 14,
+                    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                    minimap: { enabled: false },
+                    scrollBeyondLastLine: false,
+                    lineNumbers: "on",
+                    roundedSelection: true,
+                    cursorSmoothCaretAnimation: "on",
+                    cursorBlinking: "smooth",
+                    smoothScrolling: true,
+                    padding: { top: 16, bottom: 16 },
+                    suggestOnTriggerCharacters: suggestion,
+                    quickSuggestions: intellisense,
+                    parameterHints: { enabled: intellisense },
+                    snippetSuggestions: suggestion ? "inline" : "none",
+                    wordBasedSuggestions: "currentDocument",
+                    fontLigatures: true,
+                }}
+            />      
+        </div>
     );
 };

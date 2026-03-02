@@ -2,40 +2,38 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from       'next/navigation';
+import { useRouter, useSearchParams } from       'next/navigation';
 import { Search,ChevronRight } from 'lucide-react';
-import { type Problem } from "@/types"
+import { ProblemSets, type Problem } from "@/types"
 import { setUser } from '@/app/store/authReducer';
 import { getUser } from '@/app/api/auth.api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getQuestion } from '@/app/api/question.api';
+import { RootState } from '@/app/store/store';
 
-type Difficulty = 'Easy' | 'Medium' | 'Hard';
-
-const PROBLEMS: Problem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: (i + 1).toString(),
-  title: [
-    'Two Sum', 'Add Two Numbers', 'Longest Substring', 'Median of Arrays', 
-    'Zigzag Conversion', 'Reverse Integer', 'String to Integer', 'Palindrome Number',
-    'Container With Most Water', 'Integer to Roman', 'Roman to Integer', 'Longest Common Prefix',
-    '3Sum', '3Sum Closest', 'Letter Combinations', '4Sum', 'Remove Nth Node', 'Valid Parentheses',
-    'Merge Two Sorted Lists', 'Generate Parentheses'
-  ][i % 20],
-  difficulty: ['Easy', 'Medium', 'Hard'][Math.floor(15 * 3)] as Difficulty,
-  acceptance: `${(1 * 60 + 30).toFixed(1)}%`,
-  category: ['Arrays', 'Strings', 'Linked List', 'DP', 'Math'][Math.floor(3 * 5)]
-}));
 
 const ProblemsPage: React.FC = () => {
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || "1";
   const router = useRouter();
   const [search, setSearch] = useState('');
+  
   const dispatch = useDispatch();
-  const filtered = PROBLEMS.filter(p => p.title.toLowerCase().includes(search.toLowerCase()));
+  const [problems, setProblems] = useState<ProblemSets[]>([]);
+
+  // useEffect(() => {
+  //   getUser().then((res) => {
+  //     dispatch(setUser(res.data.user));
+  //   });
+  // }, []);
 
   useEffect(() => {
-    getUser().then((res) => {
-      dispatch(setUser(res.data.user));
-    });
-  }, []);
+    getQuestion.get(page, "20").then((res) => {
+      setProblems(res.data.questions)
+    })
+  }, [])
+
+  console.log(problems)
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-22">
@@ -79,35 +77,32 @@ const ProblemsPage: React.FC = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-white/5 bg-zinc-950/50">
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">ID</th>
+                {/* <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600"></th> */}
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">Title</th>
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">Difficulty</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">Acceptance</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">Company</th>
                 <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-zinc-600">Category</th>
-                <th className="px-8 py-5"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.03]">
-              {filtered.map((problem) => (
+              {problems?.map((problem) => (
                 <tr 
-                  key={problem.id} 
-                  onClick={() => router.push(`/problem/${problem.id}`)}
+                  key={problem._id} 
+                  onClick={() => router.push(`/problem/${problem._id}`)}
                   className="hover:bg-indigo-500/[0.02] transition-colors cursor-pointer group"
                 >
-                  <td className="px-8 py-6 text-zinc-700 font-mono text-sm">#{problem.id.padStart(3, '0')}</td>
                   <td className="px-8 py-6 font-bold text-zinc-200 group-hover:text-white transition-colors">{problem.title}</td>
                   <td className="px-8 py-6">
                     <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border ${
                       problem.difficulty === 'Easy' ? 'border-emerald-500/10 text-emerald-400 bg-emerald-500/5' :
                       problem.difficulty === 'Medium' ? 'border-amber-500/10 text-amber-400 bg-amber-500/5' :
-                      'border-rose-500/10 text-rose-400 bg-rose-500/5'
-                    }`}>
+                      'border-rose-500/10 text-rose-400 bg-rose-500/5'}`}>
                       {problem.difficulty}
                     </span>
                   </td>
-                  <td className="px-8 py-6 text-zinc-500 font-medium">{problem.acceptance}</td>
-                  <td className="px-8 py-6 text-zinc-500 font-medium">{problem.category}</td>
-                  <td className="px-8 py-6 text-right">
+                  <td className="px-8 py-6 text-zinc-500 font-medium">{problem.companies?.name}</td>
+                  <td className="px-8 py-6 text-zinc-500 font-medium hover:text-white transition-colors">{problem.topic?.name}</td>
+                  <td className="text-right">
                     <ChevronRight size={18} className="text-zinc-800 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
                   </td>
                 </tr>
