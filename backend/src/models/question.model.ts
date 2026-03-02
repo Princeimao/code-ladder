@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema({
     title: {
@@ -24,21 +24,21 @@ const questionSchema = new mongoose.Schema({
                 required: true
             }
         }
-    ], 
+    ],
     constraints: [{
         type: String,
         required: true
-    }], 
+    }],
     topic: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Topic",
         required: true
-    }, 
+    },
     companies: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true
-    }, 
+    },
     testCases: [
         {
             input: {
@@ -50,9 +50,9 @@ const questionSchema = new mongoose.Schema({
                 required: true
             }
         }
-    ], 
+    ],
     followUps: {
-        type: String, 
+        type: String,
         required: true
     }
 });

@@ -3,7 +3,7 @@ import { prisma } from "../config/prisma.client.js";
 
 export const user = async (req: Request, res: Response) => {
     try {
-        const email = req.user.email;
+        const { email } = req.user;
 
         const user = await prisma.user.findUnique({
             where: {
@@ -17,10 +17,11 @@ export const user = async (req: Request, res: Response) => {
         })
 
         if (!user) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "User not found"
             });
+            return;
         }
 
         return res.status(200).json({
@@ -41,11 +42,11 @@ export const user = async (req: Request, res: Response) => {
 
 export const userSubmissions = async (req: Request, res: Response) => {
     try {
-        const email = req.user.email;
-
+        const { userId } = req.query;
+        
         const user = await prisma.user.findUnique({
             where: {
-                email
+                id: userId!.toString()
             },
             include: {
                 submissions: true, 
@@ -64,13 +65,14 @@ export const userSubmissions = async (req: Request, res: Response) => {
         })
         
         if (!user) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: "User not found"
             });
+            return
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: "User found",
             data: {
@@ -79,9 +81,10 @@ export const userSubmissions = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.log("something went wrong while getting user submissions");
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
             message: "Internal server error"
         });
+        return
     }
 }

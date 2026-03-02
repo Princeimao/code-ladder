@@ -1,21 +1,25 @@
+
 import { Question } from "../models/question.model.js"
+import "../models/topic.model.js"
+import "../models/company.model.js"
+
 import { type Request, type Response } from "express"
 
 export const getQuestions = async (req: Request, res: Response) => {
     try {
-        const { page = 1, limit = 30 } = req.query;
-
-        const documents = (Number(page) - 1 ) * Number(limit);
+        const { page = 1, limit = 30 } = req.params;
+        const documents = (Number(page) - 1) * Number(limit);
         const questions = await Question.find()
-                                .limit(Number(limit))
-                                .skip(documents)
-                                .select("title difficulty _id company")
-                                .populate("company");
+            .limit(Number(limit))
+            .skip(documents)
+            .select("title difficulty _id companies topic")
+            .populate("companies")
+            .populate("topic");
 
         const totalQuestions = await Question.countDocuments();
         const totalPages = Math.ceil(totalQuestions / Number(limit));
         const hasMore = Number(page) < totalPages;
-        
+
         res.status(200).json({
             success: true,
             message: "Questions fetched successfully",
@@ -26,17 +30,18 @@ export const getQuestions = async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
-        res.status(500).json({ 
+        console.log(error);
+        res.status(500).json({
             success: false,
-            error: "Internal server error" 
+            error: "Internal server error"
         })
     }
 }
 
 export const getQuestionById = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const question = await Question.findById(id).populate("company").populate("topic");
+        const { questionId } = req.params;
+        const question = await Question.findById(questionId).populate("topic").populate("companies");
         if (!question) {
             return res.status(404).json({
                 success: false,
@@ -49,9 +54,10 @@ export const getQuestionById = async (req: Request, res: Response) => {
             data: question
         })
     } catch (error) {
-        res.status(500).json({ 
+        console.log(error);
+        res.status(500).json({
             success: false,
-            error: "Internal server error" 
+            error: "Internal server error"
         })
     }
 }

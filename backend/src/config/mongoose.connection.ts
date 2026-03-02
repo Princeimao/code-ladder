@@ -3,9 +3,9 @@ import { getEnv } from './env.config.js'
 
 const MONGO_URI = getEnv("MONGO_URI")
 
-export const connectDB = () => {
+export const connectDB = async () => {
     try {
-        mongoose.connect(MONGO_URI)
+        await mongoose.connect(MONGO_URI)
         console.log("MongoDB connected")
     } catch (error) {
         console.log(error)

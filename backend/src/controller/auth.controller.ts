@@ -104,41 +104,6 @@ export const googleCallback = async (req: Request, res: Response) => {
     }
 }
 
-export const getUser = async (req: Request, res: Response) => {
-    try {
-        const email = req.user.email;
-
-        const user = await prisma.user.findUnique({
-            where: {
-                email
-            }, 
-            select: {
-                name: true, 
-                email: true, 
-                profilePic: true
-            }
-        })
-
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-        return res.json({
-            message: "User found",
-            data: {
-                user
-            }
-        });
-    } catch (error) {
-        console.log("something went wrong while getting user");
-        return res.status(500).json({
-            message: "Internal server error"
-        });
-    }
-}
-
 export const githubLogin = async (req: Request, res: Response) => {
     try {
         const authUrl = githubAuth.getAuthorizationUrl();

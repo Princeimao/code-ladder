@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
     origin: getEnv("FRONTEND_URL"),
-    credentials: true, 
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 app.set('trust proxy', 1)
@@ -27,6 +27,10 @@ app.get("/", (req: Request, res: Response) => {
 // import routes
 import judgementRoutes from "./routes/judgement.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from './routes/user.routes.js';
+import questionRoutes from './routes/question.routes.js';
 
 app.use("/api/judgement", judgementRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/question", questionRoutes);
