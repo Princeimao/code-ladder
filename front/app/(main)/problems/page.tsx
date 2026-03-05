@@ -2,38 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from       'next/navigation';
+import { useRouter, useParams } from       'next/navigation';
 import { Search,ChevronRight } from 'lucide-react';
-import { ProblemSets, type Problem } from "@/types"
-import { setUser } from '@/app/store/authReducer';
-import { getUser } from '@/app/api/auth.api';
-import { useDispatch, useSelector } from 'react-redux';
+import { ProblemSets} from "@/types"
 import { getQuestion } from '@/app/api/question.api';
-import { RootState } from '@/app/store/store';
 
 
 const ProblemsPage: React.FC = () => {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") || "1";
+  const params = useParams();
+  const page = params.page as string || "1";
   const router = useRouter();
   const [search, setSearch] = useState('');
-  
-  const dispatch = useDispatch();
   const [problems, setProblems] = useState<ProblemSets[]>([]);
-
-  // useEffect(() => {
-  //   getUser().then((res) => {
-  //     dispatch(setUser(res.data.user));
-  //   });
-  // }, []);
 
   useEffect(() => {
     getQuestion.get(page, "20").then((res) => {
       setProblems(res.data.questions)
     })
   }, [])
-
-  console.log(problems)
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-22">

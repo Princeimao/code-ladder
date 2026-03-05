@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Code Ladder - Premium Coding Platform",
-  description: "Elite platform for algorithm training and interview engineering.",
+  title: "Code Ladder",
+  description: "Platform for algorithm training and interview engineering.",
 };
 
 export default function RootLayout({

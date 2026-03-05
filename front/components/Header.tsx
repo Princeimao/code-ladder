@@ -15,12 +15,10 @@ import {
   Settings, 
   SunMoon, 
   LogOut, 
-  ChevronRight,
-  User
+  ChevronRight
 } from 'lucide-react';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signOut } from "next-auth/react";
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '@/app/store/authReducer';
 import { RootState } from '@/app/store/store';
@@ -38,30 +36,20 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { logout as UserLogout } from '@/app/api/auth.api'
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  
-  // Get auth state from Redux
-  const auth = useSelector((state: RootState) => state);
-  const { name, picture, isAuthenticated } = auth;
+
+  const {name, picture, isAuthenticated} = useSelector((state: RootState) => state.auth);
 
   const handleLogout = async () => {
-    dispatch(logout());
-    // Sign out from next-auth if used
-    await signOut({ redirect: false });
-    router.push('/');
-  };
-
-  const getInitials = (userName: string) => {
-    return userName
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2) || <User size={16} />;
+    const response = await UserLogout()
+    if(response){
+      dispatch(logout());
+    }
   };
 
   return (
@@ -96,7 +84,7 @@ const Header: React.FC = () => {
                     <Avatar className="h-9 w-9 border border-white/10">
                       <AvatarImage src={picture || ""} alt={name} />
                       <AvatarFallback className="bg-zinc-800 text-zinc-400 text-xs font-bold">
-                        {getInitials(name)}
+                        {name}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -109,7 +97,7 @@ const Header: React.FC = () => {
                       <Avatar className="h-14 w-14 border border-white/10 ring-2 ring-orange-500/20">
                         <AvatarImage src={picture || ""} alt={name} />
                         <AvatarFallback className="bg-zinc-800 text-zinc-400 text-lg">
-                          {getInitials(name)}
+                          {name}
                         </AvatarFallback>
                       </Avatar>
                     </div>
@@ -215,7 +203,7 @@ const Header: React.FC = () => {
                  <Avatar className="h-10 w-10 border border-white/10">
                     <AvatarImage src={picture || ""} alt={name} />
                     <AvatarFallback className="bg-zinc-800 text-zinc-400">
-                      {getInitials(name)}
+                      {name}
                     </AvatarFallback>
                   </Avatar>
                   <div>

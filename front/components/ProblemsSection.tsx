@@ -2,16 +2,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Filter, ChevronRight } from 'lucide-react';
-import { type Problem } from "../types"
 import { motion } from 'framer-motion';
-
-const mockProblems: Problem[] = [
-  { id: '1', title: 'Two Sum', difficulty: 'Easy', acceptance: '49.2%', category: 'Arrays' },
-  { id: '2', title: 'Add Two Numbers', difficulty: 'Medium', acceptance: '40.1%', category: 'Linked List' },
-  { id: '3', title: 'Longest Substring Without Repeating Characters', difficulty: 'Medium', acceptance: '33.8%', category: 'Hash Table' },
-  { id: '4', title: 'Median of Two Sorted Arrays', difficulty: 'Hard', acceptance: '35.2%', category: 'Binary Search' },
-  { id: '5', title: 'Longest Palindromic Substring', difficulty: 'Medium', acceptance: '32.4%', category: 'Dynamic Programming' },
-];
+import { mockProblems } from '@/app/constants';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -73,8 +65,8 @@ const ProblemsSection: React.FC = () => {
               <tr className="border-b border-white/10 bg-zinc-900/50">
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Title</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Difficulty</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Acceptance</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Category</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Company</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase text-zinc-500">Topic</th>
               </tr>
             </thead>
             <motion.tbody 
@@ -86,9 +78,9 @@ const ProblemsSection: React.FC = () => {
             >
               {mockProblems.map((problem) => (
                 <motion.tr 
-                  key={problem.id} 
+                  key={problem._id} 
                   variants={itemVariants}
-                  onClick={() => router.push(`/problem/${problem.id}`)}
+                  onClick={() => router.push(`/problem/${problem._id}`)}
                   className="hover:bg-white/5 transition-colors cursor-pointer group"
                 >
                   
@@ -102,8 +94,8 @@ const ProblemsSection: React.FC = () => {
                       {problem.difficulty}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-zinc-500">{problem.acceptance}</td>
-                  <td className="px-6 py-4 text-zinc-500">{problem.category}</td>
+                  <td className="px-6 py-4 text-zinc-500">{problem.companies.name}</td>
+                  <td className="px-6 py-4 text-zinc-500">{problem.topic.name}</td>
                 </motion.tr>
               ))}
             </motion.tbody>

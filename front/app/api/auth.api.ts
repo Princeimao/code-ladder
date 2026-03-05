@@ -31,7 +31,7 @@ const refreshToken = async () => {
 const logout = async () => {
     try {
         const response = await apiClient.get("/auth/logout");
-        return response.data;
+        return response.data.success;
     } catch (error) {
         console.error("Error logging out:", error);
         throw error;

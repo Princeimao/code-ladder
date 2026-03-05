@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
 import { getQuestion } from '@/app/api/question.api';
 import { Problem } from '@/types';
 import { DescriptionPannel } from '@/components/DescriptionPannel';
@@ -51,7 +50,6 @@ export default function Page() {
   useEffect(() => {
     if (id) { 
       getQuestion.getQuestionById(id).then(res => {
-        console.log(res.data);
         setProblem(res.data);
       });
       const savedCode = localStorage.getItem(`code_${id}`);
@@ -66,18 +64,6 @@ export default function Page() {
      </div>
     </>
   }
-
-
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-  //       e.preventDefault();
-  //       localStorage.setItem(`code_${id}`, code);
-  //     }
-  //   };
-  //   window.addEventListener('keydown', handleKeyDown, { capture: true });
-  //   return () => window.removeEventListener('keydown', handleKeyDown, { capture: true });
-  // }, [code, id]);
 
   return (
     <div className="h-screen pt-16 bg-[#050505] text-white flex flex-col overflow-hidden ion:bg-indigo-500/30">
