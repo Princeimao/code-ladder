@@ -43,13 +43,13 @@ export const user = async (req: Request, res: Response) => {
 export const userSubmissions = async (req: Request, res: Response) => {
     try {
         const { userId } = req.query;
-        
+
         const user = await prisma.user.findUnique({
             where: {
                 id: userId!.toString()
             },
             include: {
-                submissions: true, 
+                submissions: true,
             },
         })
 
@@ -63,7 +63,7 @@ export const userSubmissions = async (req: Request, res: Response) => {
                 createdAt: sub.createdAt,
             }
         })
-        
+
         if (!user) {
             res.status(404).json({
                 success: false,
@@ -86,5 +86,39 @@ export const userSubmissions = async (req: Request, res: Response) => {
             message: "Internal server error"
         });
         return
+    }
+}
+
+export const logout = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.user;
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        })
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+            return;
+        }
+
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+
+        return res.status(200).json({
+            success: true,
+            message: "User logged out",
+        });
+    } catch (error) {
+        console.log("something went wrong while getting user");
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
 }

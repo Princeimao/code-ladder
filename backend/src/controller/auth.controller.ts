@@ -9,7 +9,7 @@ import { githubAuth } from '../services/githubAuth.service.js';
 const FRONTEND_URL = getEnv("FRONTEND_URL");
 export const googleLogin = async (req: Request, res: Response) => {
     try {
-        const {authUrl, codeVerifier, state} = googleAuth.getAuthorizationUrl();
+        const { authUrl, codeVerifier, state } = googleAuth.getAuthorizationUrl();
         await redisClient.set(`oauth:${state}`, codeVerifier);
         await redisClient.expire(`oauth:${state}`, 60 * 15);
 
@@ -24,7 +24,7 @@ export const googleLogin = async (req: Request, res: Response) => {
 
 export const googleCallback = async (req: Request, res: Response) => {
     try {
-        const {code, state} = req.query;
+        const { code, state } = req.query;
         const codeVerifier = await redisClient.get(`oauth:${state}`);
         if (!codeVerifier) {
             return res.status(400).json({
@@ -38,7 +38,7 @@ export const googleCallback = async (req: Request, res: Response) => {
         const user = await prisma.user.findUnique({
             where: {
                 email: userInfo.email
-            }, include:  {
+            }, include: {
                 accounts: true
             }
         })
@@ -62,23 +62,23 @@ export const googleCallback = async (req: Request, res: Response) => {
         // right now because of lack of bucket
         const accessToken = await generateAccessToken(userInfo.email);
         const refreshToken = await generateRefreshToken(userInfo.email);
-        
+
         await prisma.user.create({
             data: {
                 email: userInfo.email,
                 name: userInfo.name,
-                refreshToken: refreshToken, 
+                refreshToken: refreshToken,
                 accounts: {
                     create: {
                         provider: "GOOGLE",
-                        email: userInfo.email, 
+                        email: userInfo.email,
                         providerId: userInfo.sub
                     }
                 }
             },
             include: {
                 accounts: true
-            } 
+            }
         })
 
         res.cookie("accessToken", accessToken, {
@@ -94,7 +94,7 @@ export const googleCallback = async (req: Request, res: Response) => {
             sameSite: "strict",
             maxAge: 1000 * 60 * 60 * 24 * 7
         });
-        
+
         return res.redirect(`${FRONTEND_URL}/problems`)
     } catch (error) {
         console.log("something went wrong while loggin with google");
@@ -119,14 +119,14 @@ export const githubLogin = async (req: Request, res: Response) => {
 
 export const githubCallback = async (req: Request, res: Response) => {
     try {
-        const {code} = req.query;
+        const { code } = req.query;
         const idToken = await githubAuth.exchangeCode(code as string);
         const userInfo = githubAuth.getUserInfo(idToken);
 
         const user = await prisma.user.findUnique({
             where: {
                 email: userInfo.email
-            }, include:  {
+            }, include: {
                 accounts: true
             }
         })
@@ -150,23 +150,23 @@ export const githubCallback = async (req: Request, res: Response) => {
         // right now because of lack of bucket
         const accessToken = await generateAccessToken(userInfo.email);
         const refreshToken = await generateRefreshToken(userInfo.email);
-        
+
         const newUser = await prisma.user.create({
             data: {
                 email: userInfo.email,
                 name: userInfo.name,
-                refreshToken: refreshToken, 
+                refreshToken: refreshToken,
                 accounts: {
                     create: {
                         provider: "GITHUB",
-                        email: userInfo.email, 
+                        email: userInfo.email,
                         providerId: userInfo.sub
                     }
                 }
             },
             include: {
                 accounts: true
-            } 
+            }
         })
 
         res.cookie("accessToken", accessToken, {
@@ -182,7 +182,7 @@ export const githubCallback = async (req: Request, res: Response) => {
             sameSite: "strict",
             maxAge: 1000 * 60 * 60 * 24 * 7
         });
-        
+
         return res.redirect(`${FRONTEND_URL}/problems`)
     } catch (error) {
         console.log("something went wrong while loggin with github");
